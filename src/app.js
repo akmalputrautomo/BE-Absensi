@@ -11,12 +11,24 @@ require("dotenv").config();
 const connectDB = require("./config/database");
 
 // CORS configuration
+const allowedOrigins = ["http://localhost:5173", "http://localhost:3000", "https://absensi-karyawan-one.vercel.app", process.env.FRONTEND_URL].filter(Boolean);
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://absensi-karyawan-one.vercel.app", process.env.FRONTEND_URL].filter(Boolean),
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: function (origin, callback) {
+      // Izinkan request tanpa origin (seperti mobile apps, postman, curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = "Origin tidak diizinkan oleh CORS";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // PASTIKAN OPTIONS ADA
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
     credentials: true,
+    optionsSuccessStatus: 200, // Untuk browser lama
   }),
 );
 
