@@ -1,4 +1,4 @@
-// app.js
+// src/app.js
 const express = require("express");
 const app = express();
 const authRoutes = require("./routes/auth.routes");
@@ -11,10 +11,10 @@ require("dotenv").config();
 const connectDB = require("./config/database");
 connectDB();
 
-// CORS - Update dengan domain frontend Anda
+// CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://absensi-karyawan-one.vercel.app", "https://www.absensi-karyawan-one.vercel.app"],
+    origin: ["http://localhost:5173", "https://absensi-karyawan-one.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -28,7 +28,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/admin", adminRoutes);
 
-// Health check endpoint
+// Health check
 app.get("/", (req, res) => {
   res.json({
     status: true,
@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// PERBAIKAN: Handler 404 yang benar
+// Handler 404
 app.use((req, res) => {
   res.status(404).json({
     status: false,

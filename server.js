@@ -1,6 +1,6 @@
-// server.js (di ROOT folder)
+// server.js
 require("dotenv").config();
-const app = require("./src/app"); // app.js ada di folder src
+const app = require("./src/app"); // UBAH dari ./app menjadi ./src/app
 const { PORT } = require("./src/config");
 const connectDB = require("./src/config/database");
 

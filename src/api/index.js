@@ -1,4 +1,3 @@
-// api/index.js (di folder api)
-const app = require("../src/app"); // app.js ada di src/
-
+// api/index.js
+const app = require("../src/app"); // UBAH dari ../app menjadi ../src/app
 module.exports = app;
