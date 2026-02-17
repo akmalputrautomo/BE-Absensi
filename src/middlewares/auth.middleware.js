@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const User = require("../models/user.model");
+const connectDB = require("../config/database"); // <-- IMPORT!
 
 exports.verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -18,6 +19,7 @@ exports.verifyToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    await connectDB();
 
     const user = await User.findById(decoded.id);
     if (!user) {
