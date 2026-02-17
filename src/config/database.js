@@ -15,10 +15,15 @@ const connectDB = async () => {
 
   if (!cached.promise) {
     const opts = {
-      bufferCommands: false,
-      maxPoolSize: 5, // Penting untuk serverless
-      serverSelectionTimeoutMS: 5000, // Timeout 5 detik
-      socketTimeoutMS: 45000,
+      bufferCommands: true, // ✅ UBAH JADI TRUE!
+      maxPoolSize: 10, // ✅ Naikkan sedikit
+      minPoolSize: 2, // ✅ TAMBAHKAN (jaga koneksi minimal)
+      serverSelectionTimeoutMS: 30000, // ✅ Naikkan jadi 30 detik
+      socketTimeoutMS: 60000, // ✅ Naikkan jadi 60 detik
+      connectTimeoutMS: 30000, // ✅ TAMBAHKAN
+      retryWrites: true, // ✅ TAMBAHKAN
+      retryReads: true, // ✅ TAMBAHKAN
+      family: 4,
     };
 
     cached.promise = mongoose
