@@ -1,13 +1,18 @@
 const User = require("../models/user.model");
 const Attendance = require("../models/attendance.model");
+const connectDB = require("../config/database");
 
 exports.getAllUsersService = async () => {
+  await connectDB(); // <-- TAMBAHKAN!
+
   const users = await User.find().select("-password -__v").sort({ createdAt: -1 });
 
   return users;
 };
 
 exports.getAllAbsensiService = async () => {
+  await connectDB(); // <-- TAMBAHKAN!
+
   try {
     // Ambil semua data attendance dengan populate user
     const attendances = await Attendance.find()

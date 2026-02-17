@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const { JWT_SECRET } = require("../config");
+const connectDB = require("../config/database");
 
 // ================= REGISTER =================
 const validatePassword = (password) => {
@@ -10,6 +11,8 @@ const validatePassword = (password) => {
   return passwordRegex.test(password);
 };
 exports.registerService = async ({ name, email, password, no_hp }) => {
+  await connectDB(); // <-- TAMBAHKAN INI!
+
   if (!name || !email || !password || !no_hp) {
     throw new Error("Semua field wajib diisi");
   }
@@ -37,6 +40,8 @@ exports.registerService = async ({ name, email, password, no_hp }) => {
 
 // ================= LOGIN =================
 exports.loginService = async ({ email, password }) => {
+  await connectDB(); // <-- TAMBAHKAN INI!
+
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {

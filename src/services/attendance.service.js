@@ -1,9 +1,11 @@
 const Attendance = require("../models/attendance.model");
+const connectDB = require("../config/database");
 
 const getToday = () => new Date().toISOString().split("T")[0];
 
 // ================= ABSEN PAGI =================
 exports.checkInService = async (userId) => {
+  await connectDB(); // <-- TAMBAHKAN!
   const today = getToday();
 
   const existing = await Attendance.findOne({
@@ -31,6 +33,7 @@ exports.checkInService = async (userId) => {
 // ================= GET HISTORY =================
 // ================= GET HISTORY + TOTAL =================
 exports.getMyAttendanceService = async (userId) => {
+  await connectDB(); // <-- TAMBAHKAN!
   const attendances = await Attendance.find({ user: userId }).sort({ date: -1 });
 
   const totalHadir = attendances.length; // semua absensi = hadir
