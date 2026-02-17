@@ -15,21 +15,31 @@ const connectDB = async () => {
 
   if (!cached.promise) {
     const opts = {
-      bufferCommands: true, // ✅ UBAH JADI TRUE!
-      maxPoolSize: 10, // ✅ Naikkan sedikit
-      minPoolSize: 2, // ✅ TAMBAHKAN (jaga koneksi minimal)
-      serverSelectionTimeoutMS: 30000, // ✅ Naikkan jadi 30 detik
-      socketTimeoutMS: 60000, // ✅ Naikkan jadi 60 detik
-      connectTimeoutMS: 30000, // ✅ TAMBAHKAN
-      retryWrites: true, // ✅ TAMBAHKAN
-      retryReads: true, // ✅ TAMBAHKAN
+      // ⚠️⚠️⚠️ INI PALING PENTING - HARUS TRUE ⚠️⚠️⚠️
+      bufferCommands: true, // <-- PASTIKAN INI TRUE!!!
+
+      // Connection pool
+      maxPoolSize: 10,
+      minPoolSize: 2,
+
+      // Timeout settings - diperbesar
+      serverSelectionTimeoutMS: 30000,
+      socketTimeoutMS: 60000,
+      connectTimeoutMS: 30000,
+
+      // Retry logic
+      retryWrites: true,
+      retryReads: true,
+
       family: 4,
     };
+
+    console.log("🔄 Connecting to MongoDB with options:", JSON.stringify(opts));
 
     cached.promise = mongoose
       .connect(process.env.MONGO_URI, opts)
       .then((mongoose) => {
-        console.log("✅ MongoDB Connected");
+        console.log("✅ MongoDB Connected successfully");
         return mongoose;
       })
       .catch((err) => {
@@ -41,12 +51,12 @@ const connectDB = async () => {
 
   try {
     cached.conn = await cached.promise;
+    return cached.conn;
   } catch (e) {
+    console.error("❌ Failed to get connection from promise:", e);
     cached.promise = null;
     throw e;
   }
-
-  return cached.conn;
 };
 
 module.exports = connectDB;
